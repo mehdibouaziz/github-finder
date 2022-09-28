@@ -14,24 +14,37 @@ export const GithubProvider = ({children}) => {
 
     const [state, dispatch] = useReducer(GithubReducer, initialState)
 
-    const fetchUsers = async () => {
+    // Get search results from github API
+    const searchUsers = async (text) => {
         setLoading()
-        const response = await fetch(`${GITHUB_URL}/users`)
-        const data = await response.json()
+
+        const params = new URLSearchParams({
+            q: text
+        })
+
+        const response = await fetch(`${GITHUB_URL}/search/users?${params}`)
+        const { items } = await response.json()
         
-        dispatch({type: 'GET_USERS', payload: data})
+        dispatch({type: 'GET_USERS', payload: items})
     }
 
+    // trigger Spinner display
     const setLoading = () => {
         dispatch({type: 'SET_LOADING'})
+    }
+
+    // clear users in state
+    const clearUsers = () => {
+        dispatch({type: 'CLEAR_USERS'})
     }
 
     return (
         <GithubContext.Provider value={{
         users: state.users,
         loading: state.loading,
-        fetchUsers,
-        setLoading
+        searchUsers,
+        setLoading,
+        clearUsers
         }}>
             {children}
         </GithubContext.Provider>

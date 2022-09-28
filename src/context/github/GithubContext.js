@@ -9,6 +9,7 @@ const GITHUB_URL = process.env.REACT_APP_GITHUB_URL
 export const GithubProvider = ({children}) => {
     const initialState = {
         users: [],
+        user: {},
         loading: false,
     }
 
@@ -17,15 +18,24 @@ export const GithubProvider = ({children}) => {
     // Get search results from github API
     const searchUsers = async (text) => {
         setLoading()
-
         const params = new URLSearchParams({
             q: text
         })
-
         const response = await fetch(`${GITHUB_URL}/search/users?${params}`)
         const { items } = await response.json()
-        
         dispatch({type: 'GET_USERS', payload: items})
+    }
+
+    // Get single user from API
+    const getUser = async (login) => {
+        setLoading()
+        const response = await fetch(`${GITHUB_URL}/users/${login}`)
+        if(response.status === 404){
+            window.location = '/notfound'
+        } else {
+            const data = await response.json()
+            dispatch({type: 'GET_USER', payload: data})
+        }
     }
 
     // trigger Spinner display
@@ -41,8 +51,10 @@ export const GithubProvider = ({children}) => {
     return (
         <GithubContext.Provider value={{
         users: state.users,
+        user: state.user,
         loading: state.loading,
         searchUsers,
+        getUser,
         setLoading,
         clearUsers
         }}>

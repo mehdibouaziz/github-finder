@@ -1,10 +1,12 @@
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom'
 
+import './index.css'
+
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import Home from './pages/Home'
 import About from './pages/About'
-import User from './components/users/User';
+import User from './pages/User';
 import NotFound from './pages/NotFound'
 import Alert from './components/layout/Alert';
 import { GithubProvider } from './context/github/GithubContext';

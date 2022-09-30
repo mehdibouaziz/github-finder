@@ -10,6 +10,7 @@ export const GithubProvider = ({children}) => {
     const initialState = {
         users: [],
         user: {},
+        repos:[],
         loading: false,
     }
 
@@ -38,6 +39,18 @@ export const GithubProvider = ({children}) => {
         }
     }
 
+    // Get user repos from github API
+    const getUserRepos = async (login) => {
+        setLoading()
+        const params = new URLSearchParams({
+            sort: 'updated',
+            per_page: 10
+        })
+        const response = await fetch(`${GITHUB_URL}/users/${login}/repos?${params}`)
+        const data = await response.json()
+        dispatch({type: 'GET_REPOS', payload: data})
+    }
+
     // trigger Spinner display
     const setLoading = () => {
         dispatch({type: 'SET_LOADING'})
@@ -50,11 +63,11 @@ export const GithubProvider = ({children}) => {
 
     return (
         <GithubContext.Provider value={{
-        users: state.users,
-        user: state.user,
-        loading: state.loading,
+        ...state,
+        dispatch,
         searchUsers,
         getUser,
+        getUserRepos,
         setLoading,
         clearUsers
         }}>

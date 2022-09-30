@@ -5,15 +5,17 @@ import {FaCodepen, FaStore, FaUserFriends, FaUsers} from 'react-icons/fa'
 
 import GithubContext from "../context/github/GithubContext"
 import Spinner from "../components/layout/Spinner"
+import RepoList from "../components/repos/RepoList"
 
 
 const User = () => {
-    const {getUser, user, loading} = useContext(GithubContext)
+    const {getUser, user, loading, getUserRepos, repos} = useContext(GithubContext)
     const params = useParams()
 
     useEffect(() => {
         getUser(params.login)
-        // getUserRepos(params.login)
+        getUserRepos(params.login)
+        //eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const {
@@ -47,13 +49,13 @@ const User = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 mb-8 md:gap-8">
-          <div className="custom-card-image mb-6 md:mb-0 w-3/4 md:w-full">
+          <div className="custom-card-image mb-6 md:mb-0 w-1/2 md:w-full">
             <div className="rounded-lg shadow-xl card image-full card-compact">
               <figure>
                 <img src={avatar_url} alt="user avatar" />
               </figure>
               <div className="card-body justify-end gap-0">
-                <h2 className="card-title mb-0 text-primary-content text-md md:text-sm">{name}</h2>
+                <h2 className="card-title mb-0 text-primary-content text-sm">{name}</h2>
                 <p className="flex-grow-0 mb-0 text-secondary-content text-xs">{login}</p>
               </div>
             </div>
@@ -78,17 +80,17 @@ const User = () => {
               </div>
             </div>
 
-            <div className="w-full rounded-lg shadow-md bg-base-100 stats stats-vertical md:stats-horizontal">
+            <div className="w-full rounded-lg shadow-md bg-base-100 stats stats-vertical lg:stats-horizontal">
               {location && (
                 <div className="stat">
                   <div className="stat-title text-md">Location</div>
-                  <div className="text-lg stat-value">{location}</div>
+                  <div className="text-lg lg:text-base stat-value">{location}</div>
                 </div>
               )}
               {blog && (
                 <div className="stat">
                   <div className="stat-title text-md">Website</div>
-                  <div className="text-lg stat-value">
+                  <div className="text-lg lg:text-base stat-value">
                     <a href={`https://${blog}`} target='_blank' rel="noreferrer">{blog}</a>  
                   </div>
                 </div>
@@ -96,7 +98,7 @@ const User = () => {
               {twitter_username && (
                 <div className="stat">
                   <div className="stat-title text-md">Twitter</div>
-                  <div className="text-lg stat-value">
+                  <div className="text-lg lg:text-base stat-value">
                     <a href={`https://twitter.com/${twitter_username}`} target='_blank' rel="noreferrer">{twitter_username}</a>  
                   </div>
                 </div>
@@ -107,52 +109,79 @@ const User = () => {
 
         </div>
 
-        <div className="w-full py-5 mb-6 rounded-lg shadow-md bg-base-100 stats">
-          <div className="stat">
+        <div className="w-full py-0 md:py-4 mb-4 rounded-lg shadow-md bg-base-100 stats">
+          <div className="stat md:px-4 lg:px-6">
             <div className="stat-figure text-secondary">
-              <FaUsers className="text-3xl md:text-5xl" />
+              <FaUsers className="text-4xl md:text-3xl lg:text-4xl" />
             </div>
-            <div className="stat-title pr-5">
+            <div className="stat-title pr-5 md:pr-3">
               Followers
             </div>
-            <div className="stat-value pr-5 text-3xl md:text-4xl">
+            <div className="stat-value pr-5 md:pr-3 text-3xl md:text-3xl">
               {followers}
             </div>
           </div>
-          <div className="stat">
+          <div className="stat md:px-4 lg:px-6">
             <div className="stat-figure text-secondary">
-              <FaUserFriends className="text-3xl md:text-5xl" />
+              <FaUserFriends className="text-4xl md:text-3xl lg:text-4xl" />
             </div>
-            <div className="stat-title pr-5">
+            <div className="stat-title pr-5 md:pr-3">
               Following
             </div>
-            <div className="stat-value pr-5 text-3xl md:text-4xl">
+            <div className="stat-value pr-5 md:pr-3 text-3xl md:text-3xl">
               {following}
             </div>
           </div>
-          <div className="stat">
+          <div className="stat md:px-4 lg:px-6 hidden md:inline-grid">
             <div className="stat-figure text-secondary">
-              <FaCodepen className="text-3xl md:text-5xl" />
+              <FaCodepen className="text-4xl md:text-3xl lg:text-4xl" />
             </div>
-            <div className="stat-title pr-5">
+            <div className="stat-title pr-5 md:pr-3">
               Public Repos
             </div>
-            <div className="stat-value pr-5 text-3xl md:text-4xl">
+            <div className="stat-value pr-5 md:pr-3 text-3xl md:text-3xl">
+              {public_repos}
+            </div>
+          </div>
+          <div className="stat md:px-4 lg:px-6 hidden md:inline-grid">
+            <div className="stat-figure text-secondary">
+              <FaStore className="text-4xl md:text-3xl lg:text-4xl" />
+            </div>
+            <div className="stat-title pr-5 md:pr-3">
+              Public Gists
+            </div>
+            <div className="stat-value pr-5 md:pr-3 text-3xl md:text-3xl">
+              {public_gists}
+            </div>
+          </div>
+        </div>
+
+        <div className="w-full py-0 mb-6 rounded-lg shadow-md bg-base-100 stats inline-grid md:hidden">
+          <div className="stat">
+            <div className="stat-figure text-secondary">
+              <FaCodepen className="text-3xl md:text-4xl" />
+            </div>
+            <div className="stat-title pr-2 md:pr-5 text-sm md:text-base">
+              Public Repos
+            </div>
+            <div className="stat-value pr-2 md:pr-5 text-3xl md:text-3xl">
               {public_repos}
             </div>
           </div>
           <div className="stat">
             <div className="stat-figure text-secondary">
-              <FaStore className="text-3xl md:text-5xl" />
+              <FaStore className="text-3xl md:text-4xl" />
             </div>
-            <div className="stat-title pr-5">
+            <div className="stat-title pr-2 md:pr-5 text-sm md:text-base">
               Public Gists
             </div>
-            <div className="stat-value pr-5 text-3xl md:text-4xl">
+            <div className="stat-value pr-2 md:pr-5 text-3xl md:text-3xl">
               {public_gists}
             </div>
           </div>
         </div>
+
+        <RepoList repos={repos} />
       </div>
     </>
   )

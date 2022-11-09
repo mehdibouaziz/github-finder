@@ -15,15 +15,15 @@ const RepoItem = ({repo}) => {
 
   return (
     <div className='mb-1 rounded-md card bg-gray-800 hover:bg-gray-900'>
-        <div className="card-body">
-            <h3 className="mb-2 text-xl font-semibold">
+        <div className="card-body px-6 py-4">
+            <h3 className="mb-0 text-xl font-semibold">
                 <a href={html_url} target='_blank' rel="noreferrer">
                     <FaLink className='inline mr-1'/> {name}
                 </a>
             </h3>
-            <p className="mb-3">{description}</p>
+            <p className="mb-0">{description}</p>
             <div>
-                <div className="mr-2 mb-2 badge badge-info badge-lg">
+                <div className="mr-2 mb-0 badge badge-info badge-lg">
                     <FaEye className="mr-2" />
                     {watchers_count}
                 </div>

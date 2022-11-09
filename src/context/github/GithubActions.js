@@ -1,7 +1,7 @@
 import axios from "axios"
 
 const github = axios.create({
-    baseURL: process.env.REACT_APP_GITHUB_URL
+    baseURL: "https://api.github.com"
 })
 
     // Get search results from github API
